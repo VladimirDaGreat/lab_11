@@ -25,7 +25,7 @@ GREY = (128,128,128)
 GOLD = (255,215,0)
 
 pygame.init()
- 
+
 # Set the width and height of the screen [width, height]
 size = (700, 500)
 screen = pygame.display.set_mode(size)
@@ -34,14 +34,29 @@ pygame.display.set_caption("My Game")
  
 # Loop until the user clicks the close button.
 done = False
- 
+
+# Speed in pixels per frme
+x_speed = 0
+y_speed = 0
+
+# Current position for mario
+x_coord = 5
+y_coord = 375
+
 # list for drawing rain
 rain_list = []
 for i in range(100):
     x = random.randrange(0, 700)
     y = random.randrange(0, 500)
     rain_list.append([x, y])
-         
+
+# Load super mario bros image
+mario = pygame.image.load("smb_mario.png").convert()
+mario.set_colorkey(WHITE)
+
+# Load and plays rain sound
+rain_sound = pygame.mixer.Sound("rain_sound.wav")
+
 clock = pygame.time.Clock()
 # -------- Main Program Loop -----------
 while not done:
@@ -49,7 +64,26 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
- 
+
+        # User pressed down on a key
+        elif event.type == pygame.KEYDOWN:
+            # Figure out if it was an arrow key. If so
+            # adjust speed.
+            if event.key == pygame.K_a:
+                x_speed = -5
+            elif event.key == pygame.K_d:
+                x_speed = 5
+
+        # User let up on a key
+        elif event.type == pygame.KEYUP:
+            # If it is an arrow key, reset vector back to zero
+            if event.key == pygame.K_a or event.key == pygame.K_d:
+                x_speed = 0
+            
+
+    # Move the obeject according to the speed vector.
+    x_coord += x_speed  
+    
     # --- Game logic should go here
  
     # --- Screen-clearing code goes here
@@ -62,7 +96,7 @@ while not done:
     screen.fill(LIGHTBLUE)
  
     # --- Drawing code should go here
-
+ 
     # Draw path for character
     def draw_path():
 
@@ -104,6 +138,9 @@ while not done:
             # Give it a new x position
             x = random.randrange(0, 700)
             rain_list[i][0] = x
+
+    # blit mario
+    screen.blit(mario, [x_coord, y_coord])       
  
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
