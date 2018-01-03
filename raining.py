@@ -54,8 +54,10 @@ for i in range(100):
 mario = pygame.image.load("smb_mario.png").convert()
 mario.set_colorkey(WHITE)
 
-# Load and plays rain sound
+# Load and plays sounds
 rain_sound = pygame.mixer.Sound("rain_sound.wav")
+jump_sound = pygame.mixer.Sound("jump_sound.ogg")
+play = False
 
 clock = pygame.time.Clock()
 # -------- Main Program Loop -----------
@@ -74,18 +76,40 @@ while not done:
             elif event.key == pygame.K_d:
                 x_speed = 5
 
+            # If 0 is pressed then rain_sound will play if 1
+            # is pressed than rain_sound will stop
+            elif event.key == pygame.K_0:
+                play = True
+            elif event.key == pygame.K_1:
+                play = False
+
+            # If space is pressed than mario will jump:
+            elif event.key == pygame.K_SPACE:
+                y_speed = -4
+                jump_sound.play()
+                    
         # User let up on a key
         elif event.type == pygame.KEYUP:
             # If it is an arrow key, reset vector back to zero
             if event.key == pygame.K_a or event.key == pygame.K_d:
                 x_speed = 0
-            
-
+                
+     
     # Move the obeject according to the speed vector.
-    x_coord += x_speed  
+    x_coord += x_speed
+    y_coord += y_speed
     
     # --- Game logic should go here
- 
+    if play == True:
+        rain_sound.play()
+    elif play == False:
+        rain_sound.stop()
+
+    if y_coord <= 275:
+        y_speed = 4
+    elif y_coord >= 375:
+        y_speed = 0
+    
     # --- Screen-clearing code goes here
  
     # Here, we clear the screen to white. Don't put other drawing commands
