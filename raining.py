@@ -23,6 +23,8 @@ LIGHTBLUE = (176,224,230)
 GAINSBORO = (220,220,220)
 GREY = (128,128,128)
 GOLD = (255,215,0)
+YELLOW = (255, 255, 0)
+SUNSHINE = (255, 215, 0)
 
 pygame.init()
 
@@ -58,6 +60,8 @@ mario.set_colorkey(WHITE)
 rain_sound = pygame.mixer.Sound("rain_sound.wav")
 jump_sound = pygame.mixer.Sound("jump_sound.ogg")
 play = False
+
+y_animate = 250
 
 clock = pygame.time.Clock()
 # -------- Main Program Loop -----------
@@ -109,6 +113,11 @@ while not done:
         y_speed = 4
     elif y_coord >= 375:
         y_speed = 0
+
+    if x_coord <= 0:
+        x_speed = 1
+    elif x_coord >= 675:
+        x_speed = -1
     
     # --- Screen-clearing code goes here
  
@@ -120,6 +129,18 @@ while not done:
     screen.fill(LIGHTBLUE)
  
     # --- Drawing code should go here
+
+    # Draws the sun and animates its movement
+    def draw_sun(x, y, circ_s):
+        # Draws light around sun
+        pygame.draw.polygon(screen, RED, [(x-35, y-35), (x, y-circ_s), (x-circ_s, y)])
+        pygame.draw.polygon(screen, RED, [(x+35, y-35), (x, y-circ_s), (x+circ_s, y)])
+        pygame.draw.polygon(screen, RED, [(x+35, y+35), (x, y+circ_s), (x+circ_s, y)])
+        pygame.draw.polygon(screen, RED, [(x-35, y+35), (x, y+circ_s), (x-circ_s, y)])
+         
+        # Draws circle as the base
+        pos = [x, y]
+        pygame.draw.circle(screen, SUNSHINE, pos, circ_s)
  
     # Draw path for character
     def draw_path():
@@ -140,8 +161,16 @@ while not done:
         pygame.draw.rect(screen, WHITE,  [550, 150, 50, 50])
         pygame.draw.circle(screen, RED, [575, 175], 15)
         
+    # Draws the sun
+    draw_sun(350, y_animate, 40)
+    y_animate += 1
+    if y_animate >= 500:
+        y_animate = -25
 
+    # Draws the path
     draw_path()
+
+    # Draws the flag
     draw_flag()
         
 
@@ -164,7 +193,7 @@ while not done:
             rain_list[i][0] = x
 
     # blit mario
-    screen.blit(mario, [x_coord, y_coord])       
+    screen.blit(mario, [x_coord, y_coord])
  
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
