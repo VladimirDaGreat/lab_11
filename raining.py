@@ -37,7 +37,7 @@ pygame.display.set_caption("My Game")
 # Loop until the user clicks the close button.
 done = False
 
-# Speed in pixels per frme
+# Speed in pixels per frame
 x_speed = 0
 y_speed = 0
 
@@ -61,6 +61,8 @@ rain_sound = pygame.mixer.Sound("rain_sound.wav")
 jump_sound = pygame.mixer.Sound("jump_sound.ogg")
 play = False
 
+
+# Where the sun sits on the y axis
 y_animate = 250
 
 clock = pygame.time.Clock()
@@ -88,8 +90,8 @@ while not done:
                 play = False
 
             # If space is pressed than mario will jump:
-            elif event.key == pygame.K_SPACE:
-                y_speed = -4
+            elif event.key == pygame.K_SPACE and y_coord == 375:
+                y_speed = -5
                 jump_sound.play()
                     
         # User let up on a key
@@ -132,12 +134,7 @@ while not done:
 
     # Draws the sun and animates its movement
     def draw_sun(x, y, circ_s):
-        # Draws light around sun
-        pygame.draw.polygon(screen, RED, [(x-35, y-35), (x, y-circ_s), (x-circ_s, y)])
-        pygame.draw.polygon(screen, RED, [(x+35, y-35), (x, y-circ_s), (x+circ_s, y)])
-        pygame.draw.polygon(screen, RED, [(x+35, y+35), (x, y+circ_s), (x+circ_s, y)])
-        pygame.draw.polygon(screen, RED, [(x-35, y+35), (x, y+circ_s), (x-circ_s, y)])
-         
+    
         # Draws circle as the base
         pos = [x, y]
         pygame.draw.circle(screen, SUNSHINE, pos, circ_s)
@@ -162,7 +159,7 @@ while not done:
         pygame.draw.circle(screen, RED, [575, 175], 15)
         
     # Draws the sun
-    draw_sun(350, y_animate, 40)
+    draw_sun(100, y_animate, 20)
     y_animate += 1
     if y_animate >= 500:
         y_animate = -25
