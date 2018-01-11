@@ -1,16 +1,3 @@
-"""
- Pygame base template for opening a window
-
- a simple edit
- 
- Sample Python/Pygame Programs
- Simpson College Computer Science
- http://programarcadegames.com/
- http://simpson.edu/computer-science/
- 
- Explanation video: http://youtu.be/vRB_983kUMc
-"""
- 
 import pygame, random
  
 # Define some colors
